@@ -16,12 +16,12 @@ class Bigquery:
         data = (json.loads(data))
         row_to_insert = [data]
         errors = self.client.insert_rows_json(table_id, row_to_insert)  # Make an API request.
-        # if errors == []:
-        #     log().debug("New rows have been added.")
-        #     return True
-        # else:
-        #     log().error(f"Encountered errors while inserting rows: {errors}")
-        #     return False
+        if errors == []:
+            log().debug("New rows have been added.")
+            return True
+        else:
+            log().error(f"Encountered errors while inserting rows: {errors}")
+            return False
         
     def query_average_with_coord(self,origin_coord,destination_coord):
         query = """

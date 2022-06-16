@@ -1,6 +1,7 @@
 import os
 from flask import Flask, request,abort
 from src.google.Publisher import Publisher
+import src.google.Bigquery as Bigquery
 import src.utils.enviroment as env
 import src.utils.json_validator  as json_validator
 import logging
@@ -10,10 +11,17 @@ from src.utils.log import log
 
 app = Flask(__name__)
 
-log().info("Starting webapp")
 
+
+project = env.GOOGLE_CLOUD_PROJECT
+subscription_name = env.GOOGLE_CLOUD_SUBSCRIPTION
+dataset = env.DATASET
+table = env.TABLE
+bq = Bigquery(project,dataset,table)
 publisher = Publisher("challenge",env.GOOGLE_CLOUD_PROJECT)
 
+
+log().info("Starting webapp")
 
 @app.route('/insert', methods=['POST'])
 def insert():
@@ -61,7 +69,7 @@ def average_with_coord():
             log().error("please send valid requests args")
             abort(400)
         else:
-            bigquery.query_average_with_coord(origin_coord,destination_coord)
+            bq.query_average_with_coord(origin_coord,destination_coord)
         
         return "ok"
     except Exception as err:
@@ -76,7 +84,7 @@ def average_with_region():
             log().error("please send valid requests args")
             abort(400)
         else:
-            bigquery.query_average_with_region(region)
+            bq.query_average_with_region(region)
         
         return "ok"
     except Exception as err:
