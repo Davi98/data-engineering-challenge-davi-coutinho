@@ -1,5 +1,4 @@
 import logging
-import os
 import sys
 import src.utils.enviroment as env
 
