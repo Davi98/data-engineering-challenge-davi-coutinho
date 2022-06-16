@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: subscriber-deployment
+  namespace: challenge
+  labels:
+    app: subscriber
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: subscriber
+  template:
+    metadata:
+      labels:
+        app: subscriber
+    spec:
+      volumes:
+        - name: google-cloud-key
+          secret:
+            secretName: challenge-service-account-key
+      containers:
+      - name: subscriber
+        image: us.gcr.io/challenge/subscriber:latest
+        resources:
+          requests:
+            memory: "1Gi"
+          limits:
+            memory: "2Gi"
+        args: ["subscriber.py"]
+        volumeMounts:
+        - name: google-cloud-key
+          mountPath: /var/secrets/google
+        env:
+          - name: GOOGLE_APPLICATION_CREDENTIALS
+            value: /var/secrets/google/credentials.json
+        envFrom:
+          - configMapRef:
+              name: challenge-api-config
