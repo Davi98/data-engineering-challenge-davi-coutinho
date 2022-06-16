@@ -1,0 +1,116 @@
+{
+	"info": {
+		"_postman_id": "e5a9b9f5-2ffb-476a-877a-200c4f412e3e",
+		"name": "Challenge",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "19702145"
+	},
+	"item": [
+		{
+			"name": "InsertRows",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[{\n    \"region\": \"belo\",\n    \"origin_coord\": \"POINT (14.4973794438195 50.00136875782316)\",\n    \"destination_coord\": \"POINT (14.4973794438195 50.00136875782316)\",\n    \"datetime\": \"2018-05-28 09:03:40\",\n    \"datasource\": \"funny_car\"\n  },\n  {\n    \"region\": \"sao paulo\",\n    \"origin_coord\": \"POINT (14.4973794438195 50.00136875782316)\",\n    \"destination_coord\": \"POINT (14.43109483523328 50.04052930943246)\",\n    \"datetime\": \"2022-05-28 09:03:40\",\n    \"datasource\": \"funny_car\"\n  },\n  {\n    \"region\": \"sao paulo\",\n    \"origin_coord\": \"POINT (14.4973794438195 50.00136875782316)\",\n    \"destination_coord\": \"POINT (14.43109483523328 50.04052930943246)\",\n    \"datetime\": \"2022-05-28 09:03:40\"\n  }\n]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://192.168.0.42:8080/insert",
+					"protocol": "http",
+					"host": [
+						"192",
+						"168",
+						"0",
+						"42"
+					],
+					"port": "8080",
+					"path": [
+						"insert"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Average-Coord",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://192.168.0.42:8080/average_with_coord?origin_coord=POINT (14.4973794438195 50.00136875782316)&destination_coord=POINT (14.6610239449707 50.07877245872595)",
+					"protocol": "http",
+					"host": [
+						"192",
+						"168",
+						"0",
+						"42"
+					],
+					"port": "8080",
+					"path": [
+						"average_with_coord"
+					],
+					"query": [
+						{
+							"key": "origin_coord",
+							"value": "POINT (14.4973794438195 50.00136875782316)"
+						},
+						{
+							"key": "destination_coord",
+							"value": "POINT (14.6610239449707 50.07877245872595)"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Average-Region",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://192.168.0.42:8080/average_with_coord?region=POINT (14.4973794438195 50.00136875782316)",
+					"protocol": "http",
+					"host": [
+						"192",
+						"168",
+						"0",
+						"42"
+					],
+					"port": "8080",
+					"path": [
+						"average_with_coord"
+					],
+					"query": [
+						{
+							"key": "region",
+							"value": "POINT (14.4973794438195 50.00136875782316)"
+						},
+						{
+							"key": "destination_coord",
+							"value": "POINT (14.6610239449707 50.07877245872595)",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

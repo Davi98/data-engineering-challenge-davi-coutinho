@@ -28,6 +28,7 @@ python subscriber.py
 sh dev.sh
 
 The webapp start on port 8080 and it's ready to receive http requests follow the patterns bellow:
+Also, I share the postman collection on the repository
 
 ___
 
