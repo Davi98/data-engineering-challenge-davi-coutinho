@@ -1,7 +1,7 @@
 import os
 from flask import Flask, request,abort
 from src.google.Publisher import Publisher
-import src.google.Bigquery as Bigquery
+from src.google.Bigquery import Bigquery
 import src.utils.enviroment as env
 import src.utils.json_validator  as json_validator
 import logging
@@ -63,15 +63,13 @@ def insert():
 @app.route('/average_with_coord', methods=['GET'])
 def average_with_coord():
     try:
-        origin_coord = request.args.get('origin_coord',"")
-        destination_coord = request.args.get('destination_coord',"")
-        if origin_coord == "" or destination_coord == "":
+        longitude = request.args.get('longitude',"")
+        latitude = request.args.get('latitude',"")
+        if longitude == "" or latitude == "":
             log().error("please send valid requests args")
             abort(400)
         else:
-            bq.query_average_with_coord(origin_coord,destination_coord)
-        
-        return "ok"
+            return bq.query_average_with_coord(longitude,latitude)
     except Exception as err:
       log().error(f"Error in average method at webapp: {type(err)} > {err}")
       raise err
@@ -84,9 +82,7 @@ def average_with_region():
             log().error("please send valid requests args")
             abort(400)
         else:
-            bq.query_average_with_region(region)
-        
-        return "ok"
+            return bq.query_average_with_region(region)
     except Exception as err:
       log().error(f"Error in average method at webapp: {type(err)} > {err}")
       raise err

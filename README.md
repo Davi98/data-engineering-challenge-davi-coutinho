@@ -68,29 +68,68 @@ http://192.168.0.42:8080/insert
 ___
 
 ## GET average_with_coord endpoint
-http://192.168.0.42:8080/average_with_coord?origin_coord=POINT (14.4973794438195 50.00136875782316)&destination_coord=POINT (14.6610239449707 50.07877245872595)
+http://192.168.0.42:8080/average_with_coord?longitude=14.4973794438195&latitude=50.07877245872595
 
 ### The params are:
 
 | Name | Description |
 | --- | --- |
-| origin_coord | origin coordinate |
-| destination_coord | destination coordinate |
+| longitude | longitude that you are filterig |
+| latitude | latitude that you are filterig |
 
-
-## Response from GET average_with_region : 
-
-
+The response from this method is the average
 ___
 
 ## GET average_with_region endpoint
-http://192.168.0.42:8080/average_with_region?region=Turing
+http://192.168.0.42:8080/average_with_region?region=Turin
 
 ### The params are:
 | Name | Description |
 | --- | --- |
-| region | region |
+| region | region that you are filterig |
 
 
+The response from this method is the average
 
-## Response from GET average_with_region : 
+__
+# Challange
+
+Mandatory Features
+
+● There must be an automated process to ingest and store the data. ✅<br />
+Using PubSub + Insert in bigquery
+
+● Trips with similar origin, destination, and time of day should be grouped together. ✅<br />
+In the view "`streamingsdata.challenge.trips_final`" 
+
+● Develop a way to obtain the weekly average number of trips for an area, defined by a
+bounding box (given by coordinates) or by a region. ✅<br />
+Two differents GET's methods in api
+
+
+● Develop a way to inform the user about the status of the data ingestion without using a
+polling solution. ✅<br />
+It's possible see the status from data ingestion on logs,response and also the user can see in PubSub interface the status of the queue 
+
+
+● The solution should be scalable to 100 million entries. It is encouraged to simplify the
+data by a data model. Please add proof that the solution is scalable. ✅<br />
+In tests folder the file "perfomance_test.py" can be used for test the scalable of the api, you can edit in  "### Test Settings ###" some configs for the test.
+To run the test just run this in terminal: python -m tests.perfomance_test 
+
+● Use a SQL database. ✅<br />
+Google Bigquery
+
+Bonus features
+
+● Containerize your solution. ✅<br />
+Dockerfile
+
+● Sketch up how you would set up the application using any cloud provider (AWS, Google
+Cloud, etc).✅<br />
+I created some yaml files in Kubernets folder (k8s), you can use this files, the bitbucket-pipelines and Dockerfile to deploy the aplication on Google Cloud
+
+● Include a .sql file with queries to answer these questions: <br />
+○ From the two most commonly appearing regions, which is the latest datasource? ✅<br />
+○ What regions has the "cheap_mobile" datasource appeared in? ✅<br />
+Sql folder in project

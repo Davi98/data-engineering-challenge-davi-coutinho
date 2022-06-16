@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: challenge
-          image: "us.gcr.io/volanty/challenge-api:latest"
+          image: "us.gcr.io/challenge-api:latest"
           ports:
             - containerPort: 8080
           envFrom:
