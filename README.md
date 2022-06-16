@@ -1,6 +1,9 @@
 # Challenge-api
 This is api created for a test for the Data Engineering Challenge at Jobsity
 
+
+![Alt text](diagram.png?raw=true "Title")
+
 # Technology used
 The api was build with python3 using the flask lib and pubsub queue.
 
