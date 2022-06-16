@@ -37,7 +37,7 @@ def insert():
             valid = json_validator.validateJson(trip)
             if valid:
                 valids = valids + 1
-                log().debug(f"Starting inserting data in bigquery")
+                log().debug(f"Starting publish data in pubsub")
                 inserted = publisher.publish(data=trip)
                 if inserted is True:
                     inserteds = inserteds + 1
@@ -71,7 +71,7 @@ def average_with_coord():
         else:
             return bq.query_average_with_coord(longitude,latitude)
     except Exception as err:
-      log().error(f"Error in average method at webapp: {type(err)} > {err}")
+      log().error(f"Error in average_with_coord method at webapp: {type(err)} > {err}")
       raise err
 
 @app.route('/average_with_region', methods=['GET'])
@@ -84,7 +84,7 @@ def average_with_region():
         else:
             return bq.query_average_with_region(region)
     except Exception as err:
-      log().error(f"Error in average method at webapp: {type(err)} > {err}")
+      log().error(f"Error in average_with_region method at webapp: {type(err)} > {err}")
       raise err
 
     

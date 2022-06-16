@@ -13,67 +13,78 @@ class Bigquery:
 
         
     def insert_row(self,data):
-        data = (json.loads(data))
-        row_to_insert = [data]
-        errors = self.client.insert_rows_json(self.table_id, row_to_insert)  # Make an API request.
-        if errors == []:
-            log().debug("New rows have been added.")
-            return True
-        else:
-            log().error(f"Encountered errors while inserting rows: {errors}")
-            return False
-        
+        try: 
+            data = (json.loads(data))
+            row_to_insert = [data]
+            errors = self.client.insert_rows_json(self.table_id, row_to_insert)  # Make an API request.
+            if errors == []:
+                log().debug("New rows have been added.")
+                return True
+            else:
+                log().error(f"Encountered errors while inserting rows: {errors}")
+                return False
+        except Exception as err:
+            log().error(f"Error in insert_row method {err}")
+    
     def query_average_with_coord(self,longitude,latitude):
-        query = f"""
-            WITH
-            coords_week AS (
-            SELECT
-                EXTRACT(WEEK
+        try:
+            query = f"""
+                WITH
+                coords_week AS (
+                SELECT
+                    EXTRACT(WEEK
+                    FROM
+                    datetime) AS week,
+                    COUNT(*) AS number,
                 FROM
-                datetime) AS week,
-                COUNT(*) AS number,
-            FROM
-                `streamingsdata.challenge.Geopoints_Final`
-            WHERE
-                destination_longitude < {longitude}
-                AND destination_latitude < {latitude}
-            GROUP BY
-                week
-            ORDER BY
-                week ASC)
-            SELECT
-            AVG(number) as average
-            FROM
-            coords_week
-                    """
-        query_job = self.client.query(query)  # Make an API request.
+                    `streamingsdata.challenge.Geopoints_Final`
+                WHERE
+                    destination_longitude < {longitude}
+                    AND destination_latitude < {latitude}
+                GROUP BY
+                    week
+                ORDER BY
+                    week ASC)
+                SELECT
+                AVG(number) as average
+                FROM
+                coords_week
+                        """
+            query_job = self.client.query(query)  # Make an API request.
 
-        for row in query_job:
-            return str(row['average'])
+            for row in query_job:
+                return str(row['average'])
+        except Exception as err:
+            log().error(f"Error in query_average_with_coord method {err}")
+
             
     def query_average_with_region(self,region):
-        query = f"""
-            WITH
-            region_week AS (
-            SELECT
-                EXTRACT(WEEK
+        try:
+            query = f"""
+                WITH
+                region_week AS (
+                SELECT
+                    EXTRACT(WEEK
+                    FROM
+                    datetime) AS week,
+                    COUNT(*) AS number,
                 FROM
-                datetime) AS week,
-                COUNT(*) AS number,
-            FROM
-                `streamingsdata.challenge.Geopoints_Final`
-            WHERE
-                region = "{region}"
-            GROUP BY
-                week
-            ORDER BY
-                week ASC)
-            SELECT
-            AVG(number) as average
-            FROM
-            region_week
-                    """
-        query_job = self.client.query(query)  # Make an API request.
+                    `streamingsdata.challenge.Geopoints_Final`
+                WHERE
+                    region = "{region}"
+                GROUP BY
+                    week
+                ORDER BY
+                    week ASC)
+                SELECT
+                AVG(number) as average
+                FROM
+                region_week
+                        """
+            query_job = self.client.query(query)  # Make an API request.
 
-        for row in query_job:
-            return str(row['average'])
+            for row in query_job:
+                return str(row['average'])
+            
+        except Exception as err:
+            log().error(f"Error in query_average_with_region method {err}")
