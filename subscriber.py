@@ -1,7 +1,3 @@
-"""
-This module implements the Message Subscriber that will monitor all events sent throught the topic.
-"""
-import json
 from google.cloud import pubsub_v1
 from src.utils.log import log
 import src.utils.enviroment as env
@@ -20,7 +16,7 @@ subscription_path = subscriber.subscription_path(project, subscription_name)
 
 def callback(message):
     """Callback for data stream event listening.
-    Every data event submited will be read by this funcition"""
+    Every data event submited will be read by this function"""
     try:
         message_data =  message.data.decode('utf8','replace')
         log().debug(f"Loading this data to bigquery: {message_data}")

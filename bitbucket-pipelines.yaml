@@ -27,6 +27,7 @@ pipelines:
             - kubectl apply -f k8s/namespace.yaml
             - kubectl apply -f k8s/configmap-hml.yaml
             - cat k8s/deployment.yaml | sed "s/latest/$BITBUCKET_COMMIT/g" | kubectl apply -f -
+            - cat k8s/deployment-subscriber.yaml | sed "s/latest/$BITBUCKET_COMMIT/g" | kubectl apply -f -
             - kubectl apply -f k8s/service.yaml
       - step:
           name: Deploy to production
@@ -40,5 +41,6 @@ pipelines:
             - kubectl apply -f k8s/namespace.yaml
             - kubectl apply -f k8s/configmap-prd.yaml
             - cat k8s/deployment.yaml | sed "s/latest/$BITBUCKET_COMMIT/g" | kubectl apply -f -
+            - cat k8s/deployment-subscriber.yaml | sed "s/latest/$BITBUCKET_COMMIT/g" | kubectl apply -f -
             - kubectl apply -f k8s/service.yaml
             - kubectl apply -f k8s/cronjob.yaml
