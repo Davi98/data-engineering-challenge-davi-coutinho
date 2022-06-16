@@ -1,0 +1,26 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: challenge-deployment
+  namespace: challenge
+  labels:
+    app: challenge
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: challenge
+  template:
+    metadata:
+      labels:
+        app: challenge
+    spec:
+      containers:
+        - name: challenge
+          image: "us.gcr.io/volanty/challenge-api:latest"
+          ports:
+            - containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: challenge-api-config

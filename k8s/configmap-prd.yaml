@@ -1,0 +1,13 @@
+---
+    apiVersion: v1
+    data:
+      DEBUG: 'False'
+      GOOGLE_CLOUD_PROJECT : "streamingsdata"
+      GOOGLE_CLOUD_SUBSCRIPTION : "challenge-sub"
+      DATASET : "challenge"
+      TABLE : "trips"
+    kind: ConfigMap
+    metadata:
+      name: challenge-api-config
+      namespace: challenge
+

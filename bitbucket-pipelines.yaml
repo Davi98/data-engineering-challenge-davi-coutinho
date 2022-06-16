@@ -1,0 +1,44 @@
+image: google/cloud-sdk
+options:
+  docker: true
+pipelines:
+  branches:
+    master:
+      - step:
+          name: Build and push docker image
+          caches:
+            - docker
+          script:
+            - echo ${KEY_FILE_PRD_US_CENTRAL} | base64 -d >> /tmp/key-file.json
+            - gcloud auth activate-service-account --key-file /tmp/key-file.json --quiet
+            - gcloud config set project challenge
+            - gcloud auth configure-docker --quiet
+            - docker build -t challenge:${BITBUCKET_COMMIT} .
+            - docker tag challenge:${BITBUCKET_COMMIT} us.gcr.io/challenge:${BITBUCKET_COMMIT}
+            - docker push us.gcr.io/challenge:${BITBUCKET_COMMIT}
+      - step:
+          name: Deploy to hml
+          deployment: staging # can be test, staging or production.
+          script:
+            - echo ${KEY_FILE_HML} | base64 -d >> /tmp/key-file.json
+            - gcloud auth activate-service-account --key-file /tmp/key-file.json --quiet
+            - gcloud config set project challenge-hml
+            - gcloud container clusters get-credentials ${STAGING_CLUSTER} --zone us-central1-a --project challenge-hml
+            - kubectl apply -f k8s/namespace.yaml
+            - kubectl apply -f k8s/configmap-hml.yaml
+            - cat k8s/deployment.yaml | sed "s/latest/$BITBUCKET_COMMIT/g" | kubectl apply -f -
+            - kubectl apply -f k8s/service.yaml
+      - step:
+          name: Deploy to production
+          deployment: production
+          trigger: manual
+          script:
+            - echo ${KEY_FILE_PRD_US_CENTRAL} | base64 -d >> /tmp/key-file.json
+            - gcloud auth activate-service-account --key-file /tmp/key-file.json --quiet
+            - gcloud config set project challenge
+            - gcloud container clusters get-credentials bigdata --zone us-central1-a --project challenge
+            - kubectl apply -f k8s/namespace.yaml
+            - kubectl apply -f k8s/configmap-prd.yaml
+            - cat k8s/deployment.yaml | sed "s/latest/$BITBUCKET_COMMIT/g" | kubectl apply -f -
+            - kubectl apply -f k8s/service.yaml
+            - kubectl apply -f k8s/cronjob.yaml
