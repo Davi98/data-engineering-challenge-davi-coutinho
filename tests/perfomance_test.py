@@ -110,7 +110,7 @@ def set_event_time_up():
 if __name__ == '__main__':
     ### Test Settings ###
     concurrent_users = 20
-    loop_times = 100
+    loop_times = 1000
     test_time = 5
     
     workers = []
