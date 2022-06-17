@@ -87,7 +87,7 @@ The response from this method is the average
 
 __
 
-# Challange
+# Challenge
 #### Mandatory Features
 
 ● There must be an automated process to ingest and store the data. ✅
